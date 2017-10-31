@@ -1,0 +1,94 @@
+/* text-color = rgba(5, 5, 5, 0.85) */
+body {
+  background: #fff;
+  color: rgba(0, 0, 0, 0.93);
+  font-family: 'Linux Libertine', serif;
+  font-feature-settings: 'kern', 'liga', 'clig', 'onum' 1;
+  margin: 0;
+}
+#column {
+  position: relative; /* Only needed if highlight contained here */
+  max-width: 520px;
+  margin: 0 auto;
+  /* background-image: linear-gradient(#eee 1px, transparent 1px);
+  background-size: 100% 13.33px;
+  box-shadow: 1px 0 #eee, -1px 0 #eee; */
+}
+#text {
+  text-align: left;
+  font-size: 30px;
+  line-height: 46.67px;
+  margin: 10px 20px;
+  /*box-shadow: 1px 0 #eee, -1px 0 #eee;*/
+}
+.text-p {
+  padding: 10px 0;
+}
+.note-p {
+  margin: 20px 0;
+}
+.spacer {
+  height: 20px;
+}
+.seg { /* Text segs have 6px space above and below, note segs 7px */
+  /* padding: 3px 0; */
+}
+/*.text-seg {
+  padding: 3p 5px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}*/
+.note {
+  text-align: left;
+  font-size: 20px;
+  line-height: 30px;
+  margin: 0 20px; /* Was padding */
+  /*box-shadow: 1px 0 #eee, -1px 0 #eee;*/
+}
+p {
+  margin: 20px 0;
+}
+p .seg { /* Note segs have 7px space above and below, text segs 6px */
+  /* padding: 3.5px 0; */
+}
+.hide {
+  display: none;
+}
+.np {
+  /*background: rgba(255, 182, 0, 0.055);*/
+  background: hsla(43, 100%, 50%, 0.1);
+  /*background: hsla(170, 100%, 50%, 0.055);*/
+}
+.vp {
+  /*background: hsla(250, 100%, 50%, 0.055);*/
+  /*background: hsla(339, 100%, 50%, 0.05);
+  /*background: #fff1f5;
+  mix-blend-mode: multiply;*/
+}
+.cl {
+  /*background: rgba(255, 182, 0, 0.055);*/
+  /*background: hsla(0, 100%, 50%, 0.055);*/
+  /*background: hsla(250, 100%, 50%, 0.05);
+  /*background: #f3f1ff;
+  mix-blend-mode: multiply;*/
+}
+.highlight {
+  background: rgba(50, 50, 50, 0.08);
+  /* background: hsla(43, 100%, 50%, 0.1); */
+  /*box-shadow: 10px 0 0 0 hsla(43, 100%, 50%, 0.055), -10px 0 0 0 hsla(43, 100%, 50%, 0.055);
+  box-decoration-break: clone;*/
+}
+.headword {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 40px;
+}
+strong {
+  font-weight: 600;
+}
+::-moz-selection {
+  background: rgba(50, 50, 50, 0.08);
+}
+::selection {
+  background: rgba(50, 50, 50, 0.08);
+}
