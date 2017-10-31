@@ -21,7 +21,13 @@ var notes = [];
 notes.push.apply(notes, document.getElementsByClassName('note'));
 var numNotes = notes.length;
 
+var currentIndex = -1;
+
+var playAll = false;
+
 // Temporary for playing with color
+
+/*
 
 var hue = 43;
 var sat = 100;
@@ -29,9 +35,7 @@ var sat = 100;
 var nps = []
 nps.push.apply(nps, document.getElementsByClassName('np'));
 
-// Playing with highlight (temporary?)
-
-var currentIndex = -1;
+*/
 
 //
 
@@ -110,6 +114,34 @@ function showNotes(arrayOrNote) {
   }
 }
 
+//
+
+function getNextVisibleIndex() {
+  var ndx = currentIndex + 1;
+  while (ndx < numSegs) { //
+    if (segs[ndx].offsetHeight) {
+      return ndx;
+    } else {
+      ndx += 1;
+    }
+  }
+}
+
+function getPrevVisibleIndex() {
+  var ndx = currentIndex - 1;
+  while (ndx >= 0) { 
+    if (segs[ndx].offsetHeight) {
+      return ndx;
+    } else {
+      ndx -= 1;
+    }
+  }
+}
+
+//
+
+/*
+
 // Playing with color
 
 function changeColor() {
@@ -130,7 +162,12 @@ function highlight(targetIndex) {
   currentIndex = targetIndex;
 }
 
+*/
+
 // Event handlers
+
+function handleClick(e) {
+}
 
 function handleKeydown(e) {
   switch(e.keyCode) {
@@ -170,10 +207,6 @@ function handleKeydown(e) {
       break;
   }
 }
-
-*/
-
-/*
 
 // Color changer
 
@@ -215,4 +248,5 @@ function handleKeydown(e) {
 
 // Event listeners
 
-window.addEventListener('keydown', handleKeydown, false);
+document.addEventListener('click', handleClick, false);
+document.addEventListener('keydown', handleKeydown, false);
