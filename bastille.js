@@ -13,17 +13,39 @@ var numSegs = segs.length;
   }
 })();
 
-var textSegs = [];
-textSegs.push.apply(textSegs, document.getElementsByClassName('text-seg'));
-var numTextSegs = textSegs.length;
+var segData = [];
+
+// Change below (and elsewhere) to allow for segs without audio data?
+
+(function () {
+  
+  var seg;
+  var audioData;
+  
+  for (var i = 0; i < numSegs; i += 1) {
+    seg = segs[i];
+    audioData = seg.getAttribute('data-audio').split(' ');
+    segData.push({
+      'sprite': audioData[0],
+      'start': Number(audioData[1]),
+      'stop': Number(audioData[2])
+    });
+  }
+})();
 
 var notes = [];
 notes.push.apply(notes, document.getElementsByClassName('note'));
-var numNotes = notes.length;
+// var numNotes = notes.length; // Needed?
 
 var currentIndex = -1;
 
 var playAll = false;
+
+var audioTimer;
+
+var textSegs = []; // Needed? Only used in one place...
+textSegs.push.apply(textSegs, document.getElementsByClassName('text-seg'));
+var numTextSegs = textSegs.length; // Needed?
 
 // Temporary for playing with color
 
@@ -114,7 +136,68 @@ function showNotes(arrayOrNote) {
   }
 }
 
+// Temporary
+
+function moveHighlight(move) {
+  if (segs[currentIndex]) {
+    segs[currentIndex].classList.remove('highlight');
+  }
+  segs[move.targetIndex].classList.add('highlight');
+}
+
 //
+
+function startSeg(move) {
+  moveHighlight(move);
+  currentIndex = move.targetIndex;
+  if (move.skip) {
+    audio.currentTime = segData[currentIndex].start;
+    if (audio.paused) {
+      playAudio();
+  }
+  }
+}
+
+function playAudio() {
+  audio.play();
+  audioTimer = window.setInterval(checkStop, 20);
+}
+
+function checkStop() {
+  var nextVisibleIndex;
+  
+  if (audio.currentTime > segData[currentIndex].stop) {
+
+    if (!playAll) {
+      pauseAudio();
+      
+    } else {
+      nextVisibleIndex = getNextVisibleIndex();
+      
+      if (nextVisibleIndex === undefined) {
+        pauseAudio();
+        playAll = false;
+        
+      } else if (segData[nextVisibleIndex].sprite !== segData[currentIndex].sprite) {
+        startSeg({
+          targetIndex: nextVisibleIndex,
+          skip: true
+        });
+        
+      } else if (audio.currentTime > segData[nextVisibleIndex].start) {
+        startSeg({
+          targetIndex: nextVisibleIndex,
+          skip: false
+        });
+      }
+    }
+  }
+}
+
+function pauseAudio() {
+  audio.pause();
+  window.clearInterval(audioTimer);
+}
 
 function getNextVisibleIndex() {
   var ndx = currentIndex + 1;
@@ -135,6 +218,41 @@ function getPrevVisibleIndex() {
     } else {
       ndx -= 1;
     }
+  }
+}
+
+function next() {
+  var nextVisibleIndex = getNextVisibleIndex();
+  if (nextVisibleIndex !== undefined) {
+    startSeg({
+      targetIndex: nextVisibleIndex,
+      skip: true
+    });
+  }
+}
+
+function prev() {
+  var prevVisibleIndex = getPrevVisibleIndex();
+  var threshold = segData[currentIndex].start + 0.2;
+  if (audio.currentTime > threshold || prevVisibleIndex === undefined) {
+    startSeg({
+      targetIndex: currentIndex,
+      skip: true
+    });
+  } else {
+    startSeg({
+      targetIndex: prevVisibleIndex,
+      skip: true
+    });
+  }
+}
+
+function togglePlayAll() {
+  if (audio.paused) {
+    playAll = true;
+    next();
+  } else {
+    playAll = !playAll;
   }
 }
 
@@ -172,10 +290,10 @@ function handleClick(e) {
 function handleKeydown(e) {
   switch(e.keyCode) {
     case 37:
-      // prev();
+      prev();
       break;
     case 39:
-      // next();
+      next();
       break;
     case 32:
       e.preventDefault(); // So browser doesn't jump to bottom
