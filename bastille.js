@@ -297,7 +297,7 @@ function handleKeydown(e) {
       break;
     case 32:
       e.preventDefault(); // So browser doesn't jump to bottom
-      // togglePlayAll();
+      togglePlayAll();
       break;
   }
 }
