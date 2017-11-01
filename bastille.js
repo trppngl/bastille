@@ -98,7 +98,7 @@ function getTextLeft() {
   return textLeft;
 }
 
-function indent(arrayOrSeg) {
+function indent(arrayOrSeg) { // Array not needed?
   var segLeft;
   var segIndent;
   var textLeft = getTextLeft();
@@ -256,35 +256,19 @@ function togglePlayAll() {
   }
 }
 
-//
-
-/*
-
-// Playing with color
-
-function changeColor() {
-  var cssText = 'hsla(' + hue + ', ' + sat + '%, 50%, 0.055)';
-  console.log(cssText);
-  for (var i = 0, j = nps.length; i < j; i += 1) {
-    nps[i].style.background = cssText;
-  }
-}
-
-// Playing with highlight
-
-function highlight(targetIndex) {
-  if (segs[currentIndex]) {
-    segs[currentIndex].classList.remove('highlight');
-  }
-  segs[targetIndex].classList.add('highlight');
-  currentIndex = targetIndex;
-}
-
-*/
-
 // Event handlers
 
 function handleClick(e) {
+  var clickIndex;
+  if (e.target.classList.contains('seg')) {
+    clickIndex = Number(e.target.getAttribute('id'));
+  }
+  if (clickIndex !== undefined) {
+    startSeg({
+      targetIndex: clickIndex,
+      skip: true
+    });
+  }
 }
 
 function handleKeydown(e) {
@@ -301,68 +285,6 @@ function handleKeydown(e) {
       break;
   }
 }
-
-/*
-
-// Simple highlight mover
-
-function handleKeydown(e) {
-  var targetIndex;
-  switch(e.keyCode) {
-    case 37:
-      targetIndex = currentIndex - 1;
-      while (segs[targetIndex].parentNode.parentNode.classList.contains('hide')) {
-        targetIndex -= 1;
-        }
-      highlight(targetIndex);
-      break;
-    case 39:
-      targetIndex = currentIndex + 1;
-      while (segs[targetIndex].parentNode.parentNode.classList.contains('hide')) {
-        targetIndex += 1;
-        }
-      highlight(targetIndex);
-      break;
-  }
-}
-
-// Color changer
-
-function handleKeydown(e) {
-  switch(e.keyCode) {
-    case 37:
-      if (hue > 0) {
-        hue -= 1;
-      } else {
-        hue = 359;
-      }
-      changeColor();
-      break;
-    case 38:
-      e.preventDefault();
-      if (sat < 100) {
-        sat += 1;
-      }
-      changeColor();
-      break;
-    case 39:
-      if (hue < 359) {
-        hue += 1;
-      } else {
-        hue = 0;
-      }
-      changeColor();
-      break;
-    case 40:
-      e.preventDefault();
-      if (sat > 0) {
-        sat -= 1;
-      }
-      changeColor();
-      break;
-  }
-}
-*/
 
 // Event listeners
 
