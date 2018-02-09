@@ -15,24 +15,6 @@ var numSegs = segs.length;
 
 var segData = [];
 
-// Change below (and elsewhere) to allow for segs without audio data?
-
-(function () {
-  
-  var seg;
-  var audioData;
-  
-  for (var i = 0; i < numSegs; i += 1) {
-    seg = segs[i];
-    audioData = seg.getAttribute('data-audio').split(' ');
-    segData.push({
-      'sprite': audioData[0],
-      'start': Number(audioData[1]),
-      'stop': Number(audioData[2])
-    });
-  }
-})();
-
 var notes = [];
 notes.push.apply(notes, document.getElementsByClassName('note'));
 // var numNotes = notes.length; // Needed?
@@ -50,6 +32,7 @@ var numTextSegs = textSegs.length; // Needed?
 //
 
 var column = document.getElementById('column');
+
 var highlightPane = document.getElementById('highlight-pane');
 
 var segs = [];
@@ -89,6 +72,73 @@ var visLineRects = getLineRectsFromEls(segs);
 var request;
 
 var frameTimes = []; //
+
+// Init functions from sandbox
+
+var columnEl = document.getElementById('column');
+
+var currentCardIndex = null;
+
+var sentenceEls = [];
+var cardEls = [];
+var cardSentenceIndexes = [];
+var numSentences = 0;
+
+(function () {
+  
+  var paragraphs = document.getElementsByClassName('paragraph');
+  var el;
+  
+  for (var i = 0; i < paragraphs.length; i++) {
+    
+    el = paragraphs[i].firstElementChild; // IE9+
+    
+    while (el) {
+      
+      if (el.tagName === 'SPAN') {
+        
+        sentenceEls.push(el);
+        numSentences++;
+        
+      } else {
+        
+        cardEls.push(el);
+        cardSentenceIndexes.push(numSentences - 1);
+      }
+      
+      el = el.nextElementSibling; // IE9+
+    }
+  }
+})();
+
+var indents = new Array(numSentences);
+
+getIndents();
+
+function getIndents() { // Close and reopen current card (if any)?
+  
+  var offsets = getOffsets();
+  
+  for (var i = 0; i < numSentences; i++) {
+    indents[i] = sentenceEls[i].getClientRects()[0].left - offsets.left;
+  }
+}
+
+function getOffsets() { // Might not need both top and left anymore
+  
+  var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
+  
+  var columnRect = columnEl.getBoundingClientRect();
+  
+  var top = columnRect.top - scrollTop;
+  var left = columnRect.left - scrollLeft;
+  
+  return {
+    top: top,
+    left: left
+  }
+}
 
 //
 
@@ -424,6 +474,58 @@ function showNotes(arrayOrNote) {
   }
 }
 
+// Show/hide/indent/unindent/toggle functions from sandbox
+
+function show(el) {
+  if (el) {
+    el.classList.remove('hide');
+  }
+}
+
+function hide(el) {
+  if (el) {
+    el.classList.add('hide');
+  }
+}
+
+//
+
+function indent(sentenceIndex) {
+  
+  if (sentenceIndex < numSentences) {
+    sentenceEls[sentenceIndex].style.marginLeft = indents[sentenceIndex] + 'px';
+  }
+}
+
+function unindent(sentenceIndex) {
+  
+  if (sentenceIndex < numSentences) {
+    sentenceEls[sentenceIndex].style.marginLeft = '';
+  }
+}
+
+//
+
+function toggleCard(targetCardIndex) {
+  
+  if (currentCardIndex !== null) {
+    
+    hide(cardEls[currentCardIndex]);
+    unindent(cardSentenceIndexes[currentCardIndex] + 1);
+  }
+  
+  if (targetCardIndex !== null && targetCardIndex !== currentCardIndex) {
+    
+    show(cardEls[targetCardIndex]);
+    indent(cardSentenceIndexes[targetCardIndex] + 1);
+    currentCardIndex = targetCardIndex;
+    
+  } else {
+    
+    currentCardIndex = null;
+  }
+}
+
 // Temporary
 
 function moveHighlight(move) {
@@ -567,12 +669,36 @@ function togglePlayAll() {
   }
 }*/
 
-function handleClick(e) {
+/*function handleClick(e) {
   
   var index;
   
   if (e.target.classList.contains('seg')) {
     
+    index = Number(e.target.getAttribute('id'));
+    playSeg(index, true);
+  }
+}*/
+
+function handleClick(e) { // Very temp
+  
+  var index;
+  
+  var elToElevate = e.target.closest('.sentence').querySelector('.highlight-group'); // Temp
+  var elFromPoint;
+  
+  console.log(elToElevate);
+  
+  if (elToElevate) {
+    elToElevate.style.zIndex = '1';
+    elFromPoint = document.elementFromPoint(e.clientX, e.clientY);
+    console.log(elFromPoint);
+    elToElevate.style.zIndex = '-1';
+  }
+  
+  if (elFromPoint.dataset.card) {
+    toggleCard(Number(elFromPoint.dataset.card));
+  } else if (e.target.classList.contains('seg')) {
     index = Number(e.target.getAttribute('id'));
     playSeg(index, true);
   }
