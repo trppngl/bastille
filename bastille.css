@@ -1,116 +1,70 @@
 /* text-color = rgba(5, 5, 5, 0.85) */
 body {
-  background: #fff;
+  /*background: #fef9f5;*/ /* Guardian editorial */
+  /*background: #fbfbfd;*/ /* Politico */
+  /*background: #f5f5f7;*/
+  background: #f4f4f6;
+  /*background: #f3f3f5;*/
+  /*background: #f2f2f4;*/
+  /*background: #fff;*/ /* yellow highlight */
   color: rgba(0, 0, 0, 0.93);
   font-family: 'Linux Libertine', serif;
   font-feature-settings: 'kern', 'liga', 'clig', 'onum' 1;
   margin: 0;
+  cursor: default;
 }
+
 #column {
   position: relative; /* Only needed if highlight contained here */
-  max-width: 480px;
-  margin: 10px auto;
+  max-width: 484px;
+  margin: 11px auto;
   /*background-image: linear-gradient(#eee 1px, transparent 1px);
-  background-size: 100% 6.3848px;
+  background-size: 100% 11px;
   box-shadow: 1px 0 #eee, -1px 0 #eee;*/
 }
-#text-pane {
-  text-align: left;
-  font-size: 28px;
-  line-height: 44.6934px; /* 1.5962em = 44.6934px, either works */
-  /*box-shadow: 1px 0 #eee, -1px 0 #eee;*/
+
+.sentence {
+  position: relative;
+  font-size: 29px;
+  line-height: 44px;
+  padding: 5.5px 0;
 }
-.text-p {
-  padding: 0;
-}
-/*.note-p {
-  margin: 20px 0;
-}*/
-.spacer {
-  height: 20px;
-}
-.seg { 
-  /* Text segs have 6px space above and below, note segs 7px */
-  /* padding: 3px 0; */
-}
+
 .text-seg {
-  padding: 6.3848px 0;
+  padding: 5.5px 0;
 }
-/*.text-seg {
-  padding: 3px 5px;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}*/
+
 .note {
-  text-align: left;
-  font-size: 20px;
-  line-height: 38.3086px; /* 5/7 = 31.9238px, 6/7 = 38.3086px */
-  margin: 0 20px; /* Was padding */
-  /*box-shadow: 1px 0 #eee, -1px 0 #eee;*/
+  font-size: 22px;
+  line-height: 33px;
+  margin: 27.5px 22px;
 }
-p {
-  margin: 25.6px 0;
-}
-p .seg { /* Note segs have 7px space above and below, text segs 6px */
-  /* padding: 3.5px 0; */
-}
-.hide {
-  display: none;
-}
-.np {
-  /*background: rgba(255, 182, 0, 0.055);*/
+
+.note span {
   /*background: hsla(43, 100%, 50%, 0.1);*/
-  /*background: hsla(170, 100%, 50%, 0.055);*/
+  padding: 4px 0;
 }
-.vp {
-  /*background: hsla(250, 100%, 50%, 0.055);*/
-  /*background: hsla(339, 100%, 50%, 0.05);
-  /*background: #fff1f5;
-  mix-blend-mode: multiply;*/
-}
-.cl {
-  /*background: rgba(255, 182, 0, 0.055);*/
-  /*background: hsla(0, 100%, 50%, 0.055);*/
-  /*background: hsla(250, 100%, 50%, 0.05);
-  /*background: #f3f1ff;
-  mix-blend-mode: multiply;*/
-}
-.highlight {
-  /*background: rgba(50, 50, 50, 0.08);*/
-  /*transition: background 1s ease;*/
-  background: hsla(43, 100%, 50%, 0.1);
-  /*box-shadow: 10px 0 0 0 hsla(43, 100%, 50%, 0.055), -10px 0 0 0 hsla(43, 100%, 50%, 0.055);
-  box-decoration-break: clone;*/
-}
-/*.headword {
-  font-size: 30px;
-  font-weight: 600;
-  line-height: 40px;
-}*/
-/*strong {
-  font-weight: 700;
-}*/
+
 ::-moz-selection {
   background: rgba(50, 50, 50, 0.08);
 }
+
 ::selection {
   background: rgba(50, 50, 50, 0.08);
 }
 
-/**/
-
-.sg {
-  /*background: rgba(255, 226, 153, 0.3);*/
-  padding: 4.6px 0;
-}
-
 .highlight-box {
   position: absolute;
-  background: rgba(255, 226, 153, 0.3);
-  /*background: hsla(43, 100%, 50%, 0.1);*/
-  /*background: rgba(255, 229, 163, 0.3);*/
-  height: 32px;
-  padding-bottom: 12.8px;
+  /*background: rgba(255, 226, 153, 0.3);*/
+  /*background: rgba(255, 232, 173, 0.35);*/
+  /*background: rgba(255, 237, 191, 0.5);*/
+  /*background: rgba(255, 228, 173, 0.35);  hue 40 */
+  /*margin: 5.5px 0;*/
+  height: 44px; /* 44px or 33px */
+  /*padding-bottom: 12.8px;*/
+  background: #fff; /* white highlight */
+  /*background: #ffecb9;*/ /* yellow highlight */
+  /*opacity: 0.3;*/ /* yellow highlight */
 }
 
 #highlight-pane {
@@ -118,44 +72,62 @@ p .seg { /* Note segs have 7px space above and below, text segs 6px */
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: -1;
+  z-index: -2; /* white highlight */
+  /*z-index: -1;*/ /* yellow highlight */
 }
 
-.paint {
+.highlight {
+  display: inline-block;
+  position: absolute;
   background: hsla(250, 100%, 50%, 0.055);
-  /*background: rgba(120, 120, 120, 0.1);*/
-  /*background: #f2f1ed;*/
-  /*background: rgba(50, 50, 50, 0.08);*/
-}
-
-.backdrop {
-  height: 32px;
-  position: absolute;
+  height: 33px;
   z-index: -1;
-  display: inline-block;
-  /*background: hsla(250, 100%, 50%, 0.055);*/
-  top: 6.4px;
+  margin: 5.5px 0;
+  top: 0;
 }
 
-#backdrop0 {
-  left: 140px;
-  width: 150px;
-}
-
-#backdrop1 {
-  left: 140px;
-  width: 100px;
-}
-.inline-block {
-  display: inline-block;
+.highlight-group {
   position: absolute;
+  top: 0;
   left: 0;
 }
 
-#test-pane {
-  z-index: -2;
-  background: rgba(120, 120, 120, 0.1);
-  position: absolute;
-  top: 0;
-  width: 100%;
+#highlight0 {
+  top: 44px;
+  left: -51px;
+  width: 196px;
+}
+
+#highlight1 {
+  top: 44px;
+  left: -51px;
+  width: 83px;
+}
+
+#highlight2 {
+  top: 88px;
+  left: -32px;
+  width: 104px;
+}
+
+#highlight3 {
+  top: 44px;
+  left: -27px;
+  width: 120px;
+}
+
+#highlight4 {
+  top: 0px;
+  left: 235px;
+  width: 95px;
+}
+
+#highlight5 {
+  top: 44px;
+  left: 212px;
+  width: 84px;
+}
+
+.hide {
+  display: none;
 }

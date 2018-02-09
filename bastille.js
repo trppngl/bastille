@@ -322,7 +322,7 @@ function playSeg(index, click) {
   }
   
   currentIndex = index;
-  audio.currentTime = segData[currentIndex].start;
+  audio.currentTime = times[currentIndex][0];
   if (audio.paused) {
     playAudio();
   }
@@ -439,7 +439,7 @@ function startSeg(move) {
   moveHighlight(move);
   currentIndex = move.targetIndex;
   if (move.skip) {
-    audio.currentTime = segData[currentIndex].start;
+    audio.currentTime = times[currentIndex][0];
     if (audio.paused) {
       playAudio();
     }
@@ -454,7 +454,7 @@ function playAudio() {
 function checkStop() {
   var nextVisibleIndex;
   
-  if (audio.currentTime > segData[currentIndex].stop) {
+  if (audio.currentTime > times[currentIndex][1]) {
 
     if (!playAll) {
       pauseAudio();
@@ -469,7 +469,7 @@ function checkStop() {
       } else if (segData[nextVisibleIndex].sprite !== segData[currentIndex].sprite) {
         playSeg(nextVisibleIndex);
         
-      } else if (audio.currentTime > segData[nextVisibleIndex].start) {
+      } else if (audio.currentTime > times[nextVisibleIndex][0]) {
         playSeg(nextVisibleIndex);
       }
     }
@@ -510,15 +510,27 @@ function next() {
   }
 }
 
+// First function below results in audio "skipping" but good highlight movement. Second function below results in good audio but a highlight that slows way down as it nears the top. How to fix?
+
 function prev() {
   var prevVisibleIndex = getPrevVisibleIndex();
-  var threshold = segData[currentIndex].start + 0.25;
-  if (audio.currentTime > threshold || prevVisibleIndex === undefined) {
+  var threshold = times[currentIndex][0] + 0.25;
+  if (audio.currentTime > threshold) {
     playSeg(currentIndex);
-  } else {
+  } else if (prevVisibleIndex !== undefined) {
     playSeg(prevVisibleIndex);
   }
 }
+
+/*function prev() {
+  var prevVisibleIndex = getPrevVisibleIndex();
+  var threshold = times[currentIndex][0] + 0.25;
+  if (audio.currentTime > threshold || prevVisibleIndex === undefined) {
+    playSeg(currentIndex);
+  } else if (prevVisibleIndex) {
+    playSeg(prevVisibleIndex);
+  }
+}*/
 
 /*function prev() {
   var prevVisibleIndex = getPrevVisibleIndex();
@@ -560,6 +572,7 @@ function handleClick(e) {
   var index;
   
   if (e.target.classList.contains('seg')) {
+    
     index = Number(e.target.getAttribute('id'));
     playSeg(index, true);
   }
@@ -607,3 +620,23 @@ function handleKeydown(e) {
 
 document.addEventListener('click', handleClick, false);
 document.addEventListener('keydown', handleKeydown, false);
+
+//
+
+var times = [
+  [356.908, 358.217],
+  [358.244, 360.619],
+  [360.842, 364.097],
+  [364.097, 365.352],
+  [366.617, 369.518],
+  [369.518, 370.272],
+  [370.272, 372.331],
+  [372.468, 373.928],
+  [374.053, 374.937],
+  [374.937, 376.306],
+  [376.692, 380.103],
+  [381.499, 386.316],
+  [387.897, 392.791],
+  [392.952, 394.813],
+  [394.984, 397.363],
+]
